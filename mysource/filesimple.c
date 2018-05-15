@@ -8,9 +8,49 @@
  * tokens is predictable.
  */
 
-static const char *JSON_STRING =
+
+char *readJSONFile()	{
+	printf("함수가 실행되었습니다.\n");
+	char *New_JSONSTRING;
+	int count=0;
+	New_JSONSTRING = (char*)malloc(sizeof(char)*1);
+	strcpy(New_JSONSTRING,"");
+	FILE *f;
+	f = fopen("data.json","r");
+	char *temp;
+	temp = (char*)malloc(sizeof(char)*1);
+
+	while(1){
+		if(feof(f))
+		{
+			printf("끝\n");
+			break;
+		}
+		fgets(temp,sizeof(temp),f);
+		count+=strlen(temp)+1;
+		New_JSONSTRING=realloc(New_JSONSTRING,sizeof(char)*count);
+		strcat(New_JSONSTRING,temp);
+	}
+
+/*
+	while(1)
+	{
+		if(f == NULL)
+		{
+			break;
+			printf("끝");
+
+		}
+		fgets(temp,sizeof(temp),f);
+		strcat(New_JSONSTRING,temp);
+	}*/
+	fclose(f);
+	return New_JSONSTRING;
+}
+
+/*static const char *JSON_STRING =
 	"{\"user\": \"johndoe\", \"admin\": false, \"uid\": 1000,\n  "
-	"\"groups\": [\"users\", \"wheel\", \"audio\", \"video\"]}";
+	"\"groups\": [\"users\", \"wheel\", \"audio\", \"video\"]}";*/
 
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 	if (tok->type == JSMN_STRING && (int) strlen(s) == tok->end - tok->start &&
@@ -21,6 +61,13 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 }
 
 int main() {
+	char *JSON_STRING = readJSONFile();
+	printf("%s",JSON_STRING);
+
+
+
+
+
 	int i;
 	int r;
 	jsmn_parser p;
