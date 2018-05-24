@@ -8,9 +8,24 @@
  * tokens is predictable.
  */
 
+void jsonNameList(char *jsonstr, jsmntok_t *t, int tokcount)
+{
+	int i,j=1;
+	printf("***** Name List *****\n");
+	for(i = 1; i < tokcount; i++)
+	{
+		//printf("Tok(%d) - Toke(%d): %d-%d\"%.*s\"\n",i,i-1,t[i-1].end-t[i].start,t[i+1].start-t[i].end,t[i].end-t[i].start, jsonstr + t[i].start);
+		if(i-1,t[i-1].end-t[i].start==-6||t[i+1].start-t[i].end==4)
+		{
+			printf("NAME[%d]: %.*s\n",j,t[i].end-t[i].start, jsonstr + t[i].start);
+			j++;
+		}
+	}
+
+
+}
 
 char *readJSONFile()	{
-	printf("함수가 실행되었습니다.\n");
 	char *New_JSONSTRING;
 	int count=0;
 	New_JSONSTRING = (char*)malloc(sizeof(char)*1);
@@ -21,29 +36,15 @@ char *readJSONFile()	{
 	temp = (char*)malloc(sizeof(char)*1);
 
 	while(1){
+	fgets(temp,sizeof(temp),f);
 		if(feof(f))
 		{
-			printf("끝\n");
 			break;
 		}
-		fgets(temp,sizeof(temp),f);
 		count+=strlen(temp)+1;
 		New_JSONSTRING=realloc(New_JSONSTRING,sizeof(char)*count);
 		strcat(New_JSONSTRING,temp);
 	}
-
-/*
-	while(1)
-	{
-		if(f == NULL)
-		{
-			break;
-			printf("끝");
-
-		}
-		fgets(temp,sizeof(temp),f);
-		strcat(New_JSONSTRING,temp);
-	}*/
 	fclose(f);
 	return New_JSONSTRING;
 }
@@ -62,11 +63,6 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 
 int main() {
 	char *JSON_STRING = readJSONFile();
-	printf("%s",JSON_STRING);
-
-
-
-
 
 	int i;
 	int r;
@@ -85,39 +81,7 @@ int main() {
 		printf("Object expected\n");
 		return 1;
 	}
+	jsonNameList(JSON_STRING,&t[0],r);
 
-	/* Loop over all keys of the root object */
-	for (i = 1; i < r; i++) {
-		if (jsoneq(JSON_STRING, &t[i], "user") == 0) {
-			/* We may use strndup() to fetch string value */
-			printf("- User: %.*s\n", t[i+1].end-t[i+1].start,
-					JSON_STRING + t[i+1].start);
-			i++;
-		} else if (jsoneq(JSON_STRING, &t[i], "admin") == 0) {
-			/* We may additionally check if the value is either "true" or "false" */
-			printf("- Admin: %.*s\n", t[i+1].end-t[i+1].start,
-					JSON_STRING + t[i+1].start);
-			i++;
-		} else if (jsoneq(JSON_STRING, &t[i], "uid") == 0) {
-			/* We may want to do strtol() here to get numeric value */
-			printf("- UID: %.*s\n", t[i+1].end-t[i+1].start,
-					JSON_STRING + t[i+1].start);
-			i++;
-		} else if (jsoneq(JSON_STRING, &t[i], "groups") == 0) {
-			int j;
-			printf("- Groups:\n");
-			if (t[i+1].type != JSMN_ARRAY) {
-				continue; /* We expect groups to be an array of strings */
-			}
-			for (j = 0; j < t[i+1].size; j++) {
-				jsmntok_t *g = &t[i+j+2];
-				printf("  * %.*s\n", g->end - g->start, JSON_STRING + g->start);
-			}
-			i += t[i+1].size + 1;
-		} else {
-			printf("Unexpected key: %.*s\n", t[i].end-t[i].start,
-					JSON_STRING + t[i].start);
-		}
-	}
 	return EXIT_SUCCESS;
 }
