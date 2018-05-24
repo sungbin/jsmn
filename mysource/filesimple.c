@@ -34,6 +34,29 @@ void printNameList(char *jsonstr, jsmntok_t *t, int *nameTokIndex)
 	}
 }
 
+void selectNameList(char *jsonstr, jsmntok_t *t, int *nameTokIndex)
+{
+	int input,i,j=0,z;
+	int maxindex;
+	while(nameTokIndex[j] !=0)
+	{
+		j++;
+	}
+	maxindex = j-1;
+	int maxNameToken = nameTokIndex[maxindex];
+	do{
+		printf("Select Name's no (exit:0) >> ");
+		scanf("%d",&input);
+		i=nameTokIndex[input-1];
+		printf("NAME[%d]: %.*s\n",input,t[i].end-t[i].start, jsonstr + t[i].start);
+
+		for(z=maxNameToken;z>nameTokIndex[input-1];z--)
+			if(nameTokIndex[input]>z)
+				printf("%.*s\n",t[z].end-t[z].start, jsonstr + t[z].start);
+
+	}while(input!=0);
+}
+
 char *readJSONFile()	{
 	char *New_JSONSTRING;
 	int count=0;
@@ -94,6 +117,7 @@ int main() {
 	jsonNameList(JSON_STRING,&t[0],r,&nameTokIndex[0]);
 
 	printNameList(JSON_STRING,&t[0],&nameTokIndex[0]);
+	selectNameList(JSON_STRING, &t[0], &nameTokIndex[0]);
 
 	return EXIT_SUCCESS;
 }
