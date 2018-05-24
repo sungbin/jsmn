@@ -8,21 +8,30 @@
  * tokens is predictable.
  */
 
-void jsonNameList(char *jsonstr, jsmntok_t *t, int tokcount)
+void jsonNameList(char *jsonstr, jsmntok_t *t, int tokcount, int *nameTokIndex)
 {
 	int i,j=1;
-	printf("***** Name List *****\n");
 	for(i = 1; i < tokcount; i++)
 	{
 		//printf("Tok(%d) - Toke(%d): %d-%d\"%.*s\"\n",i,i-1,t[i-1].end-t[i].start,t[i+1].start-t[i].end,t[i].end-t[i].start, jsonstr + t[i].start);
 		if(i-1,t[i-1].end-t[i].start==-6||t[i+1].start-t[i].end==4)
 		{
-			printf("NAME[%d]: %.*s\n",j,t[i].end-t[i].start, jsonstr + t[i].start);
+			nameTokIndex[j-1] = i;
 			j++;
 		}
 	}
+}
 
-
+void printNameList(char *jsonstr, jsmntok_t *t, int *nameTokIndex)
+{
+	printf("***** Name List *****\n");
+	int i =1,j=0;
+	while(nameTokIndex[j]!=0)
+	{
+		i=nameTokIndex[j];
+		printf("NAME[%d]: %.*s\n",j+1,t[i].end-t[i].start, jsonstr + t[i].start);
+		j++;
+	}
 }
 
 char *readJSONFile()	{
@@ -81,7 +90,10 @@ int main() {
 		printf("Object expected\n");
 		return 1;
 	}
-	jsonNameList(JSON_STRING,&t[0],r);
+	int nameTokIndex[100]={0};
+	jsonNameList(JSON_STRING,&t[0],r,&nameTokIndex[0]);
+
+	printNameList(JSON_STRING,&t[0],&nameTokIndex[0]);
 
 	return EXIT_SUCCESS;
 }
