@@ -11,10 +11,9 @@
 void jsonNameList(char *jsonstr, jsmntok_t *t, int tokcount, int *nameTokIndex)
 {
 	int i,j=1;
-	for(i = 1; i < tokcount; i++)
+	for(i = 0; i < tokcount; i++)
 	{
-		//printf("Tok(%d) - Toke(%d): %d-%d\"%.*s\"\n",i,i-1,t[i-1].end-t[i].start,t[i+1].start-t[i].end,t[i].end-t[i].start, jsonstr + t[i].start);
-		if(i-1,t[i-1].end-t[i].start==-6||t[i+1].start-t[i].end==4)
+		if((t+i)->type == JSMN_STRING && (t+i)-> size == 1)
 		{
 			nameTokIndex[j-1] = i;
 			j++;
@@ -109,10 +108,10 @@ int main() {
 	}
 
 	/* Assume the top-level element is an object */
-	if (r < 1 || t[0].type != JSMN_OBJECT) {
-		printf("Object expected\n");
-		return 1;
-	}
+	// if (r < 1 || t[0].type != JSMN_OBJECT) {
+	// 	printf("Object expected\n");
+	// 	return 1;
+	// }
 	int nameTokIndex[100]={0};
 	jsonNameList(JSON_STRING,&t[0],r,&nameTokIndex[0]);
 
