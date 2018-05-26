@@ -8,8 +8,39 @@
  * tokens is predictable.
  */
 
+/*my practice*/
+ void printtoken(const char *JSON_STRING, jsmntok_t *t, int count){
+    int i=0;
+    for(i=0; i<count; i++){
+    printf("index: [%2d] start&end{%d, %d} size <%d> type '%d' parent <%d>\n%.*s\n", i, t[i].start, t[i].end, t[i].size, t[i].type, t[i].parent,t[i].end-t[i].start,
+          JSON_STRING + t[i].start);
+       }
+ }
+
+void firstDataOfObject(const char *JSON_STRING, jsmntok_t *t, int count)
+{
+	int i;
+	int j =1;
+	for(i = 1;i<count;i++)
+	{
+		if(t[i].type==1&&t[i].parent == 0)
+		{
+			while(1)
+			{
+				i++;
+				if((t+i)->type == JSMN_STRING && (t+i)-> size == 1)
+					break;
+			}
+			printf("[NAME %d] %.*s\n",j,t[i+1].end-t[i+1].start,
+	          JSON_STRING + t[i+1].start);
+			j++;
+		}
+	}
+}
+
 void jsonNameList(char *jsonstr, jsmntok_t *t, int tokcount, int *nameTokIndex)
 {
+	printf("***** Object List *****\n");
 	int i,j=1;
 	for(i = 0; i < tokcount; i++)
 	{
@@ -28,7 +59,7 @@ void printNameList(char *jsonstr, jsmntok_t *t, int *nameTokIndex)
 	while(nameTokIndex[j]!=0)
 	{
 		i=nameTokIndex[j];
-		printf("NAME[%d]: %.*s\n",j+1,t[i].end-t[i].start, jsonstr + t[i].start);
+		printf("NAME[%d]: %.*s",j+1,t[i].end-t[i].start, jsonstr + t[i].start);
 		j++;
 	}
 }
@@ -112,11 +143,14 @@ int main() {
 	// 	printf("Object expected\n");
 	// 	return 1;
 	// }
-	int nameTokIndex[100]={0};
-	jsonNameList(JSON_STRING,&t[0],r,&nameTokIndex[0]);
+	//int nameTokIndex[100]={0};
+	//jsonNameList(JSON_STRING,&t[0],r,&nameTokIndex[0]);
 
-	printNameList(JSON_STRING,&t[0],&nameTokIndex[0]);
-	selectNameList(JSON_STRING, &t[0], &nameTokIndex[0]);
+	//printNameList(JSON_STRING,&t[0],&nameTokIndex[0]);
+	//selectNameList(JSON_STRING, &t[0], &nameTokIndex[0]);
 
+	//printtoken(JSON_STRING,&t[0], r);
+
+	firstDataOfObject(JSON_STRING,&t[0], r);
 	return EXIT_SUCCESS;
 }
