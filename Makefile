@@ -34,7 +34,7 @@ jsondump: example/jsondump.o libjsmn.a
 clean:
 	rm -f *.o example/*.o
 	rm -f *.a *.so
-	rm -f simple_example
+	rm -f simple_examplef
 	rm -f jsondump
 	rm -f myexample
 
