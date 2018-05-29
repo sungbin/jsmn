@@ -30,13 +30,14 @@ void firstDataOfObjectAndSelectObject(const char *JSON_STRING, jsmntok_t *t, int
   printf("****** Name List ******\n");
 	for(i = 0;i<count;i++)
 	{
-    if(t[i].parent == -1 && t[i].type == 1)
+    if(t[i].parent == 0 && t[i].type == 1)
     {
         j++;
         objectStartList = (int*) realloc(objectStartList,sizeof(int)*j);
-        objectStartList[j-1] = i+1;
+        objectStartList[j-1] = i;
+        //printf("###%d###\n",i+1);
     }
-		if(t[i].parent == 0)
+		if(t[i].parent == (objectStartList[j-1]))
 		{
 			// while(1)
 			// {
@@ -55,8 +56,8 @@ void firstDataOfObjectAndSelectObject(const char *JSON_STRING, jsmntok_t *t, int
   printf("\n\n\n****** Object List ******\n");
   for(i=0;i<j;i++)
   {
-    printf("[Name %d] %.*s\n",i+1,t[i+2].end-t[i+2].start,
-          JSON_STRING + t[i+2].start);
+    printf("[Name %d] %.*s\n",i+1,t[objectStartList[i]+2].end-t[objectStartList[i]+2].start,
+          JSON_STRING + t[objectStartList[i]+2].start);
   }
 
   int selectedNum;
@@ -70,12 +71,13 @@ void firstDataOfObjectAndSelectObject(const char *JSON_STRING, jsmntok_t *t, int
         printf("그 번호의 object는 존재하지 않습니다.\n");
       else if(selectedNum>0&&selectedNum<j)
       {
-        printf("name : %.*s\n",t[objectStartList[selectedNum-1]+1].end-t[objectStartList[selectedNum-1]+1].start, JSON_STRING + t[objectStartList[selectedNum-1]+1].start);
+        printf("%.*s : ",t[objectStartList[selectedNum-1]+1].end-t[objectStartList[selectedNum-1]+1].start, JSON_STRING + t[objectStartList[selectedNum-1]+1].start);
+        printf("%.*s\n",t[objectStartList[selectedNum-1]+2].end-t[objectStartList[selectedNum-1]+2].start, JSON_STRING + t[objectStartList[selectedNum-1]+2].start);
         for(z=objectStartList[selectedNum-1]+2;z<objectStartList[selectedNum]-1;z++)
         {
           if(t[z].type==3||t[z].type==2)
           {
-            if(t[z].size>=1 &&t[z].parent == 0)
+            if(t[z].size>=1 &&t[z].parent == objectStartList[selectedNum-1])
             {
               printf("\t[%.*s]    ",t[z].end-t[z].start, JSON_STRING + t[z].start);
               printf("%.*s\n",t[z+1].end-t[z+1].start, JSON_STRING + t[z+1].start);
@@ -86,12 +88,13 @@ void firstDataOfObjectAndSelectObject(const char *JSON_STRING, jsmntok_t *t, int
       }
       else if(selectedNum == j)
       {
-        printf("name : %.*s\n",t[objectStartList[selectedNum-1]+1].end-t[objectStartList[selectedNum-1]+1].start, JSON_STRING + t[objectStartList[selectedNum-1]+1].start);
+        printf("%.*s : ",t[objectStartList[selectedNum-1]+1].end-t[objectStartList[selectedNum-1]+1].start, JSON_STRING + t[objectStartList[selectedNum-1]+1].start);
+        printf("%.*s\n",t[objectStartList[selectedNum-1]+2].end-t[objectStartList[selectedNum-1]+2].start, JSON_STRING + t[objectStartList[selectedNum-1]+2].start);
         for(z=objectStartList[selectedNum-1]+2;z<count;z++)
         {
           if(t[z].type==3||t[z].type==2)
           {
-            if(t[z].size>=1 &&t[z].parent == 0)
+            if(t[z].size>=1 &&t[z].parent == objectStartList[selectedNum-1])
             {
               printf("\t[%.*s]    ",t[z].end-t[z].start, JSON_STRING + t[z].start);
               printf("%.*s\n",t[z+1].end-t[z+1].start, JSON_STRING + t[z+1].start);
@@ -158,7 +161,7 @@ char *readJSONFile()	{
 	New_JSONSTRING = (char*)malloc(sizeof(char)*1);
 	strcpy(New_JSONSTRING,"");
 	FILE *f;
-	f = fopen("data2.json","r");
+	f = fopen("data3.json","r");
 	char *temp;
 	temp = (char*)malloc(sizeof(char)*1);
 
