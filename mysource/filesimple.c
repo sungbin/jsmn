@@ -24,13 +24,19 @@ void firstDataOfObjectAndSelectObject(const char *JSON_STRING, jsmntok_t *t, int
 	int j =0, y=0;
   int z;
   int *objectStartList;
+  int objectStartPoint =0;
   objectStartList = (int*) malloc(sizeof(int));
   int *NameList;
   NameList = (int*) malloc(sizeof(int));
   printf("****** Name List ******\n");
 	for(i = 0;i<count;i++)
 	{
-    if(t[i].parent == 0 && t[i].type == 1)
+    if(t[i].parent == 0&& t[i].type ==3&&t[i].size==1)
+    {
+      objectStartPoint+=2;
+      continue;
+    }
+    if(t[i].parent == objectStartPoint && t[i].type == 1) //parent 수정필요.
     {
         j++;
         objectStartList = (int*) realloc(objectStartList,sizeof(int)*j);
@@ -39,12 +45,6 @@ void firstDataOfObjectAndSelectObject(const char *JSON_STRING, jsmntok_t *t, int
     }
 		if(t[i].parent == (objectStartList[j-1]))
 		{
-			// while(1)
-			// {
-			// 	i++;
-			// 	if((t+i)->type == JSMN_STRING && (t+i)-> size == 1)
-			// 		break;
-			// }
       y++;
       NameList = (int*) realloc(NameList,sizeof(int)*j);
       NameList[j-1] = i+1;
@@ -158,11 +158,20 @@ void selectNameList(char *jsonstr, jsmntok_t *t, int *nameTokIndex)
 char *readJSONFile()	{
 	char *New_JSONSTRING;
 	int count=0;
+  char filename[15];
 	New_JSONSTRING = (char*)malloc(sizeof(char)*1);
 	strcpy(New_JSONSTRING,"");
 	FILE *f;
-	f = fopen("data3.json","r");
-	char *temp;
+  printf("원하는 파일명 입력:");
+  scanf("%s",filename);
+  strcat(filename,".json");
+	f = fopen(filename,"r"); //@@@@@@@@@@@@@@@@@@@@@@@@@@수정필요 12번.
+  if((f = fopen(filename, "r")) == NULL) // 파일 열기
+  {
+   printf("%s 파일이 존재하지 않습니다.\n",filename);
+   return NULL;
+  }
+  char *temp;
 	temp = (char*)malloc(sizeof(char)*1);
 
 	while(1){
