@@ -41,7 +41,6 @@ void firstDataOfObjectAndSelectObject(const char *JSON_STRING, jsmntok_t *t, int
         j++;
         objectStartList = (int*) realloc(objectStartList,sizeof(int)*j);
         objectStartList[j-1] = i;
-        //printf("###%d###\n",i+1);
     }
 		if(t[i].parent == (objectStartList[j-1]))
 		{
@@ -52,7 +51,6 @@ void firstDataOfObjectAndSelectObject(const char *JSON_STRING, jsmntok_t *t, int
 	          JSON_STRING + t[i].start);
 		}
 	}
-  //printf("@@@@@@@@ %d @@@@@@@@",j);
   printf("\n\n\n****** Object List ******\n");
   for(i=0;i<j;i++)
   {
@@ -61,6 +59,7 @@ void firstDataOfObjectAndSelectObject(const char *JSON_STRING, jsmntok_t *t, int
   }
 
   int selectedNum;
+  int end = count;
   while(1)
     {
       printf("원하는 번호 입력(Exit:0) :");
@@ -69,28 +68,13 @@ void firstDataOfObjectAndSelectObject(const char *JSON_STRING, jsmntok_t *t, int
         break;
       else if(selectedNum<0||selectedNum>j)
         printf("그 번호의 object는 존재하지 않습니다.\n");
-      else if(selectedNum>0&&selectedNum<j)
+      else if(selectedNum>0&&selectedNum<=j)
       {
         printf("%.*s : ",t[objectStartList[selectedNum-1]+1].end-t[objectStartList[selectedNum-1]+1].start, JSON_STRING + t[objectStartList[selectedNum-1]+1].start);
         printf("%.*s\n",t[objectStartList[selectedNum-1]+2].end-t[objectStartList[selectedNum-1]+2].start, JSON_STRING + t[objectStartList[selectedNum-1]+2].start);
-        for(z=objectStartList[selectedNum-1]+2;z<objectStartList[selectedNum]-1;z++)
-        {
-          if(t[z].type==3||t[z].type==2)
-          {
-            if(t[z].size>=1 &&t[z].parent == objectStartList[selectedNum-1])
-            {
-              printf("\t[%.*s]    ",t[z].end-t[z].start, JSON_STRING + t[z].start);
-              printf("%.*s\n",t[z+1].end-t[z+1].start, JSON_STRING + t[z+1].start);
-              z++;
-            }
-          }
-        }
-      }
-      else if(selectedNum == j)
-      {
-        printf("%.*s : ",t[objectStartList[selectedNum-1]+1].end-t[objectStartList[selectedNum-1]+1].start, JSON_STRING + t[objectStartList[selectedNum-1]+1].start);
-        printf("%.*s\n",t[objectStartList[selectedNum-1]+2].end-t[objectStartList[selectedNum-1]+2].start, JSON_STRING + t[objectStartList[selectedNum-1]+2].start);
-        for(z=objectStartList[selectedNum-1]+2;z<count;z++)
+        if(selectedNum<j)
+            end = objectStartList[selectedNum]-1;
+        for(z=objectStartList[selectedNum-1]+2;z<end;z++)
         {
           if(t[z].type==3||t[z].type==2)
           {
@@ -165,7 +149,7 @@ char *readJSONFile()	{
   printf("원하는 파일명 입력:");
   scanf("%s",filename);
   strcat(filename,".json");
-	f = fopen(filename,"r"); //@@@@@@@@@@@@@@@@@@@@@@@@@@수정필요 12번.
+	f = fopen(filename,"r");
   if((f = fopen(filename, "r")) == NULL) // 파일 열기
   {
    printf("%s 파일이 존재하지 않습니다.\n",filename);
