@@ -1,0 +1,29 @@
+{
+  "Tablet_PC":
+  [
+    {
+      "company": "samsung",
+      "name": "galaxyTab_A6_32GB",
+      "price": 319000,
+      "count": 3,
+      "shopping_mall": "coupang",
+      "status": "new"
+    },
+    {
+      "company": "apple",
+      "name": "ipad_Air2_32GB",
+      "price": 419000,
+      "count": 4,
+      "shopping_mall": "amajon",
+      "status": "new"
+    },
+    {
+      "company": "apple",
+      "name": "ipad_Air2_64GB",
+      "price": 519790,
+      "count": 2,
+      "shopping_mall": "G_market",
+      "status": "used"
+    }
+  ]
+}
