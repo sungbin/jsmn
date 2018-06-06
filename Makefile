@@ -25,7 +25,7 @@ test_strict_links: test/tests.c
 
 jsmn_test.o: jsmn_test.c libjsmn.a
 
-myexample: mysource/productlist.o libjsmn.a
+myexample: mysource/myproduct.o libjsmn.a
 	$(CC) $(LDFLAGS) $^ -o $@
 
 jsondump: example/jsondump.o libjsmn.a
