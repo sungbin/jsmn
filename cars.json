@@ -1,0 +1,34 @@
+{
+  "cars" : [
+    {
+      "model" : "Sonata",
+      "maker" : "Hyundai",
+      "year" : 2016,
+      "gas" : "gasoline"
+    },
+    {
+      "model" : "Opirus",
+      "maker" : "Kia",
+      "year" : 2011,
+      "gas" : "gasoline"
+    },
+    {
+      "model" : "Spark",
+      "maker" : "Chevrolet",
+      "year" : 2018,
+      "gas" : "gasoline"
+    },
+    {
+      "model" : "Audi_A6",
+      "maker" : "Audi",
+      "year" : 2019,
+      "gas" : "Diesel"
+    },
+    {
+      "model" : "BoongBoong",
+      "maker" : "SeongBin",
+      "year" : 2022,
+      "gas" : "Diesel"
+    }
+  ]
+}
